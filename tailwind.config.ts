@@ -20,6 +20,9 @@
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  images: {
+    domains: ["lh3.googleusercontent.com"], // Add this line
+  },
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",

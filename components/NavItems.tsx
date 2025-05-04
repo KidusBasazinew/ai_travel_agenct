@@ -1,26 +1,48 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { sidebarItems } from "@/constants";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { logoutUser, getExistingUser } from "@/appwrite/auth";
+import { account } from "@/appwrite/client";
+import { User } from "../lib/types";
 
 const NavItems = () => {
-  const user = {
-    name: "Kidus",
-    email: "kidusbw@gmail.com",
-    imageUrl: "/assets/images/david.webp",
-  };
+  const pathname = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
 
-  const currentPath = usePathname();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await account.get();
+        // Assuming getExistingUser returns Models.Document | null
+        const userData = await getExistingUser(currentUser.$id);
 
-  const handleClick = () => {};
+        // If userData is of type Models.Document, map it to a User type
+        if (userData) {
+          const user = {
+            $id: userData.$id,
+            name: userData.name,
+            email: userData.email,
+            imageUrl: userData.imageUrl || "",
+          };
+          setUser(user); // Now we're passing a valid User object
+        }
+      } catch (error) {
+        console.error("No user found", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
-    // await logoutUser();
-    // navigate('/sign-in')
-    console.log("Log out");
+    await logoutUser();
+    router.push("/sign-in");
   };
+
   return (
     <section className="nav-items">
       <Link href="/" className="link-logo">
@@ -34,17 +56,14 @@ const NavItems = () => {
             <Link href={href} key={id}>
               <div
                 className={`group nav-item ${
-                  currentPath === href ? "bg-primary-100 !text-white" : ""
+                  pathname === href ? "bg-primary-100 !text-white" : ""
                 }`}
-                onClick={handleClick}
               >
                 <img
                   src={icon}
                   alt={label}
                   className={`group-hover:brightness-0 size-0 group-hover:invert ${
-                    currentPath === href
-                      ? "brightness-0 invert"
-                      : "text-dark-200"
+                    pathname === href ? "brightness-0 invert" : "text-dark-200"
                   }`}
                 />
                 {label}
@@ -58,22 +77,22 @@ const NavItems = () => {
             src={user?.imageUrl || "/assets/images/david.webp"}
             alt={user?.name || "David"}
             referrerPolicy="no-referrer"
-            width={100}
-            height={100}
+            width={40}
+            height={40}
+            className="rounded-full"
           />
-
           <article>
-            <h2>{user?.name}</h2>
-            <p>{user?.email}</p>
+            <h2>{user?.name || "Guest"}</h2>
+            <p>{user?.email || "N/A"}</p>
           </article>
 
           <button onClick={handleLogout} className="cursor-pointer">
             <Image
               src="/assets/icons/logout.svg"
               alt="logout"
+              width={24}
+              height={24}
               className="size-6"
-              width={100}
-              height={100}
             />
           </button>
         </footer>

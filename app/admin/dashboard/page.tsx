@@ -1,15 +1,46 @@
 "use client";
 import Header from "@/components/Header";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../components/syncfusion-license";
 import StatsCard from "@/components/StatsCard";
 import { allTrips, dashboardStats, user } from "@/constants";
 import TripCard from "@/components/TripCard";
+import { getExistingUser, getUser } from "@/appwrite/auth";
+import { User } from "../../../lib/types";
+import { account } from "@/appwrite/client";
+
 const page = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await account.get();
+        // Assuming getExistingUser returns Models.Document | null
+        const userData = await getExistingUser(currentUser.$id);
+
+        // If userData is of type Models.Document, map it to a User type
+        if (userData) {
+          const user = {
+            $id: userData.$id,
+            name: userData.name,
+            email: userData.email,
+            imageUrl: userData.imageUrl || "",
+          };
+          setUser(user); // Now we're passing a valid User object
+        }
+      } catch (error) {
+        console.error("No user found", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <main className="dashboard wrapper">
       <Header
-        title={`Welcome ${user.name ?? "Gust"} 👋`}
+        title={`Welcome ${user?.name ?? "Gust"} 👋`}
         description="Track activitys,trends and popular destination in real time"
       ></Header>
       <section className="flex flex-col gap-6">
