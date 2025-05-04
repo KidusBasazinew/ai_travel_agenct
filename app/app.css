@@ -167,7 +167,7 @@
       @apply size-5;
     }
     figcaption {
-      @apply text-sm md:text-lg font-normal truncate text-gray-100;
+      @apply text-sm md:text-lg font-normal truncate text-gray-600;
     }
   }
 
@@ -203,7 +203,7 @@
       @apply w-full flex flex-col gap-2.5 px-6 relative;
     }
     label {
-      @apply text-sm font-normal text-gray-100;
+      @apply text-sm font-normal text-gray-600;
     }
   }
 

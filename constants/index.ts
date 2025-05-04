@@ -18,7 +18,7 @@ export const sidebarItems = [
     id: 4,
     icon: "/assets/icons/itinerary.svg",
     label: "AI Trips",
-    href: "admin/trips",
+    href: "/admin/trips",
   },
 ];
 
@@ -152,7 +152,7 @@ export const dashboardStats = {
 };
 export const allTrips = [
   {
-    id: 1,
+    id: "1",
     name: "Ancient Ruins",
     imageUrls: ["/assets/images/card-img-3.png"],
     itinerary: [{ location: "Greece" }],
@@ -161,7 +161,7 @@ export const allTrips = [
     estimatedPrice: "$1,000",
   },
   {
-    id: 2,
+    id: "2",
     name: "Gondola Ride",
     imageUrls: ["/assets/images/card-img-4.png"],
     itinerary: [{ location: "Venice" }],
@@ -170,7 +170,7 @@ export const allTrips = [
     estimatedPrice: "$2,000",
   },
   {
-    id: 3,
+    id: "3",
     name: "Italy's Hidden Retreat",
     imageUrls: ["/assets/images/card-img-5.png"],
     itinerary: [{ location: "Positano" }],
@@ -179,7 +179,7 @@ export const allTrips = [
     estimatedPrice: "$3,000",
   },
   {
-    id: 4,
+    id: "4",
     name: "Culture Refresh",
     imageUrls: ["/assets/images/card-img-6.png"],
     itinerary: [{ location: "Thailand" }],
@@ -190,7 +190,7 @@ export const allTrips = [
 ];
 export const users = [
   {
-    id: 1,
+    id: "1",
     name: "John Doe",
     email: "john.doe@example.com",
     imageUrl: "/assets/images/david.webp",
@@ -199,7 +199,7 @@ export const users = [
     status: "user",
   },
   {
-    id: 2,
+    id: "2",
     name: "Jane Smith",
     email: "jane.smith@example.com",
     imageUrl: "/assets/images/david.webp",
@@ -208,7 +208,7 @@ export const users = [
     status: "user",
   },
   {
-    id: 3,
+    id: "3",
     name: "John Smith",
     email: "john.smith@example.com",
     imageUrl: "/assets/images/david.webp",

@@ -6,11 +6,10 @@ import StatsCard from "@/components/StatsCard";
 import { allTrips, dashboardStats, user } from "@/constants";
 import TripCard from "@/components/TripCard";
 import { getExistingUser, getUser } from "@/appwrite/auth";
-import { User } from "../../../lib/types";
 import { account } from "@/appwrite/client";
 
 const page = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<BaseUser | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,12 +21,12 @@ const page = () => {
         // If userData is of type Models.Document, map it to a User type
         if (userData) {
           const user = {
-            $id: userData.$id,
+            id: userData.$id,
             name: userData.name,
             email: userData.email,
             imageUrl: userData.imageUrl || "",
           };
-          setUser(user); // Now we're passing a valid User object
+          setUser(user as BaseUser);
         }
       } catch (error) {
         console.error("No user found", error);

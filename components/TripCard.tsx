@@ -23,7 +23,7 @@ const TripCard = ({
       href={
         currentPath === "/" || currentPath.startsWith("/travel")
           ? `/travel/${id}`
-          : `/trips/${id}`
+          : `/admin/trips/${id}`
       }
       className="trip-card"
     >

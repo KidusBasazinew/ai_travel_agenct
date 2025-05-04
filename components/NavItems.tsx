@@ -6,12 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { logoutUser, getExistingUser } from "@/appwrite/auth";
 import { account } from "@/appwrite/client";
-import { User } from "../lib/types";
 
 const NavItems = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<BaseUser | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -28,7 +27,7 @@ const NavItems = () => {
             email: userData.email,
             imageUrl: userData.imageUrl || "",
           };
-          setUser(user); // Now we're passing a valid User object
+          setUser(user);
         }
       } catch (error) {
         console.error("No user found", error);
