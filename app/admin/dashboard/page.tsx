@@ -3,39 +3,113 @@ import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import "../../../components/syncfusion-license";
 import StatsCard from "@/components/StatsCard";
-import { allTrips, dashboardStats, user } from "@/constants";
+import { dashboardStats, user } from "@/constants";
 import TripCard from "@/components/TripCard";
-import { getExistingUser, getUser } from "@/appwrite/auth";
+import { getAllUsers, getExistingUser, getUser } from "@/appwrite/auth";
 import { account } from "@/appwrite/client";
+import { getAllTrips } from "@/appwrite/trips";
+import { parseTripData } from "@/lib/utils";
+import { Models } from "appwrite";
+import {
+  getTripsByTravelStyle,
+  getUserGrowthPerDay,
+  getUsersAndTripsStats,
+} from "@/appwrite/dashboard";
+
+interface DayPlan {
+  day: number;
+  location: string;
+  activities: Array<{
+    time: string;
+    description: string;
+  }>;
+}
+
+interface Trip extends Models.Document {
+  tripDetails: string;
+  imageUrls: string[];
+  status: string;
+}
 
 const page = () => {
   const [user, setUser] = useState<BaseUser | null>(null);
+  const [allTrips, setAllTrips] = useState<any[]>([]);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    usersJoined: { currentMonth: 0, lastMonth: 0 },
+    totalTrips: 0,
+    tripsCreated: { currentMonth: 0, lastMonth: 0 },
+    userRole: { total: 0, currentMonth: 0, lastMonth: 0 },
+  });
+  const [userGrowth, setUserGrowth] = useState<any[]>([]);
+  const [tripsByTravelStyle, setTripsByTravelStyle] = useState<any[]>([]);
+  const [allUsers, setAllUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch current user
         const currentUser = await account.get();
-        // Assuming getExistingUser returns Models.Document | null
         const userData = await getExistingUser(currentUser.$id);
-
-        // If userData is of type Models.Document, map it to a User type
         if (userData) {
-          const user = {
+          setUser({
             id: userData.$id,
             name: userData.name,
             email: userData.email,
             imageUrl: userData.imageUrl || "",
-          };
-          setUser(user as BaseUser);
+            dateJoined: userData.joinedAt,
+          });
         }
+        setUser(user as BaseUser);
+
+        // Fetch all dashboard data in parallel
+        const [statsData, growthData, travelStyleData, usersData, tripsData] =
+          await Promise.all([
+            getUsersAndTripsStats(),
+            getUserGrowthPerDay(),
+            getTripsByTravelStyle(),
+            getAllUsers(4, 0),
+            getAllTrips(4, 0),
+          ]);
+
+        // Set dashboard stats
+        setDashboardStats({
+          totalUsers: statsData.totalUsers,
+          usersJoined: statsData.usersJoined,
+          totalTrips: statsData.totalTrips,
+          tripsCreated: statsData.tripsCreated,
+          userRole: statsData.userRole,
+        });
+
+        // Set user growth data
+        setUserGrowth(growthData);
+
+        // Set trips by travel style
+        setTripsByTravelStyle(travelStyleData);
+
+        // Set mapped users
+        const mappedUsers = usersData.users.map((user: any) => ({
+          imageUrl: user.imageUrl,
+          name: user.name,
+          count: user.itineraryCount ?? Math.floor(Math.random() * 10),
+        }));
+        setAllUsers(mappedUsers);
+
+        // Process and set trips
+        const parsedTrips = tripsData.allTrips.map((trip: any) => ({
+          id: trip.$id,
+          ...parseTripData(trip.tripDetails),
+          imageUrls: trip.imageUrls ?? [],
+        }));
+        setAllTrips(parsedTrips);
       } catch (error) {
-        console.error("No user found", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, []);
-
+  console.log(dashboardStats.totalUsers);
   return (
     <main className="dashboard wrapper">
       <Header
@@ -57,7 +131,7 @@ const page = () => {
             lastMonthCount={dashboardStats.tripsCreated.lastMonth}
           />
           <StatsCard
-            headerTitle="Total Users"
+            headerTitle="Active Users"
             total={dashboardStats.userRole.total}
             currentMonthCount={dashboardStats.userRole.currentMonth}
             lastMonthCount={dashboardStats.userRole.lastMonth}
@@ -67,15 +141,15 @@ const page = () => {
       <section className="container">
         <h1 className="text-xl font-semibold text-dark-100">Created Trips</h1>
         <div className="trip-grid">
-          {allTrips.slice(0, 4).map((trip) => (
+          {allTrips.map((trip) => (
             <TripCard
               key={trip.id}
               id={trip.id}
-              name={trip.name}
-              location={trip.itinerary?.[0]?.location ?? ""}
+              name={trip.name || ""} // Use already parsed data
               imageUrl={trip.imageUrls[0]}
-              tags={trip.tags}
-              price={trip.estimatedPrice}
+              location={trip.itinerary?.[0]?.location ?? ""}
+              tags={[trip.interests || "", trip.travelStyle || ""]}
+              price={trip.estimatedPrice || ""}
             />
           ))}
         </div>

@@ -253,8 +253,8 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
         <div className="trip-grid">
           {allTrips.map((trip) => (
             <TripCard
-              key={trip.id}
-              id={trip.id}
+              key={trip.$id}
+              id={trip.$id}
               name={parseTripData(trip.tripDetails)?.name || ""}
               imageUrl={trip.imageUrls[0]}
               location={

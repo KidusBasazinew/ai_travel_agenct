@@ -22,12 +22,12 @@ const NavItems = () => {
         // If userData is of type Models.Document, map it to a User type
         if (userData) {
           const user = {
-            $id: userData.$id,
+            id: userData.$id,
             name: userData.name,
             email: userData.email,
             imageUrl: userData.imageUrl || "",
           };
-          setUser(user);
+          setUser(user as BaseUser);
         }
       } catch (error) {
         console.error("No user found", error);
