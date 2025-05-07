@@ -12,6 +12,7 @@ import TripCard from "@/components/TripCard";
 import { useEffect, useState } from "react";
 import { getTripById, getAllTrips } from "@/appwrite/trips";
 import { Models } from "appwrite";
+import Link from "next/link";
 
 interface DayPlan {
   day: number;
@@ -248,9 +249,14 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
             </div>
           </section>
         ))}
-        <ButtonComponent type="button" className="button-class !h-11 !w-full ">
-          <span className="p-16-semibold text-white">Book Now</span>
-        </ButtonComponent>
+        <Link href={`/payment/${trip.$id}`} className="w-full">
+          <ButtonComponent
+            type="button"
+            className="button-class !h-11 !w-full "
+          >
+            <span className="p-16-semibold text-white">Book Now</span>
+          </ButtonComponent>
+        </Link>
       </section>
       <section className="flex flex-col gap-6">
         <h2 className="p-24-semibold text-dark-100">Popular Trips</h2>

@@ -57,7 +57,11 @@ const Navbar = () => {
     await logoutUser();
     router.push("/sign-in");
   };
-  if (location === "/sign-in" || location.startsWith("/admin")) {
+  if (
+    location === "/sign-in" ||
+    location.startsWith("/admin") ||
+    location.startsWith("/payment")
+  ) {
     return null;
   }
 
