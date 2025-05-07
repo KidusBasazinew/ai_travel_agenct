@@ -27,7 +27,7 @@ const TripCard = ({
       }
       className="trip-card"
     >
-      <img src={imageUrl} alt={name} />
+      <Image src={imageUrl} width={600} height={600} alt={name} />
 
       <article>
         <h2>{name}</h2>

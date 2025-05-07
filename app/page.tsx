@@ -5,15 +5,14 @@ import TripCard from "@/components/TripCard";
 import { parseTripData } from "@/lib/utils";
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { PagerComponent } from "@syncfusion/ej2-react-grids";
-import Image from "next/image";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import "../components/syncfusion-license";
-import Navbar from "@/components/Navbar";
-import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
-import MobileSidebar from "@/components/MobileSidebar";
+
 import FeaturedDestination from "@/components/FeaturedDestination";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 export default function Home() {
   const [allTrips, setAllTrips] = useState<Trip[]>([]);
   const router = useRouter();
@@ -52,6 +51,7 @@ export default function Home() {
     const fetchTrips = async () => {
       try {
         const tripsData = await getAllTrips(4, 0);
+        //@ts-ignore
         const parsedTrips = tripsData.allTrips.map((trip: any) => ({
           id: trip.$id,
           ...parseTripData(trip.tripDetails),
@@ -189,7 +189,9 @@ export default function Home() {
         <footer className="h-28 bg-white">
           <div className="wrapper footer-container">
             <Link href="/">
-              <img
+              <Image
+                width={30}
+                height={30}
                 src="/assets/icons/logo.svg"
                 alt="logo"
                 className="size-[30px]"

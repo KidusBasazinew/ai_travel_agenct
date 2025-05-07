@@ -3,9 +3,8 @@ import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import "../../../components/syncfusion-license";
 import StatsCard from "@/components/StatsCard";
-import { dashboardStats, user } from "@/constants";
 import TripCard from "@/components/TripCard";
-import { getAllUsers, getExistingUser, getUser } from "@/appwrite/auth";
+import { getAllUsers, getExistingUser } from "@/appwrite/auth";
 import { account } from "@/appwrite/client";
 import { getAllTrips } from "@/appwrite/trips";
 import { parseTripData } from "@/lib/utils";
@@ -16,23 +15,9 @@ import {
   getUsersAndTripsStats,
 } from "@/appwrite/dashboard";
 
-interface DayPlan {
-  day: number;
-  location: string;
-  activities: Array<{
-    time: string;
-    description: string;
-  }>;
-}
-
-interface Trip extends Models.Document {
-  tripDetails: string;
-  imageUrls: string[];
-  status: string;
-}
-
-const page = () => {
+const DashboardPage = () => {
   const [user, setUser] = useState<BaseUser | null>(null);
+  //@ts-ignore
   const [allTrips, setAllTrips] = useState<any[]>([]);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
     totalUsers: 0,
@@ -60,7 +45,6 @@ const page = () => {
             dateJoined: userData.joinedAt,
           });
         }
-        setUser(user as BaseUser);
 
         // Fetch all dashboard data in parallel
         const [statsData, growthData, travelStyleData, usersData, tripsData] =
@@ -157,4 +141,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DashboardPage;

@@ -2,6 +2,7 @@
 import React from "react";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const FeaturedDestination = ({
   containerClass = "",
@@ -38,7 +39,9 @@ const FeaturedDestination = ({
           </h2>
 
           <figure className="flex gap-2 items-center">
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/assets/images/david.webp"
               alt="user"
               className={cn("size-4 rounded-full aspect-square", {

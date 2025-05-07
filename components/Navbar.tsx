@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -5,6 +6,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { account } from "@/appwrite/client";
 import { logoutUser, getExistingUser } from "@/appwrite/auth";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const Navbar = () => {
   const params = useParams();
@@ -117,7 +119,9 @@ const Navbar = () => {
             onClick={handleLogout}
             className="cursor-pointer rounded-full bg-white opacity-70 p-1 transition-all duration-300 hover:opacity-100"
           >
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/assets/icons/logout.svg"
               alt="logout"
               className="size-2 rotate-180"

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.3.0",
     "@syncfusion/ej2-base": "^29.1.36",
     "@syncfusion/ej2-react-base": "^29.1.33",
     "@syncfusion/ej2-react-buttons": "^29.1.34",

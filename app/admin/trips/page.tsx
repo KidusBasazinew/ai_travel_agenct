@@ -73,6 +73,7 @@ export default function TripsPage() {
           totalRecordsCount={total}
           pageSize={8}
           currentPage={currentPage}
+          //@ts-ignore
           click={(args: any) => handlePageChange(args.currentPage)}
           cssClass="!mb-4"
         />

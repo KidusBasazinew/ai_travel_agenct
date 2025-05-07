@@ -11,8 +11,10 @@ import { getAllUsers } from "@/appwrite/auth";
 
 import "../../../components/syncfusion-license";
 import { Models } from "appwrite";
+import page from "../page";
+import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const [users, setUsers] = useState<{
     total: number;
     users: Models.Document[];
@@ -51,11 +53,13 @@ const page = () => {
             textAlign="Left"
             template={(props: UserData) => (
               <div className="flex items-center gap-1.5 px-4">
-                <img
+                <Image
                   src={props.imageUrl}
                   alt="user"
                   className="rounded-full size-8 aspect-square"
                   referrerPolicy="no-referrer"
+                  width={32}
+                  height={32}
                 />
                 <span>{props.name}</span>
               </div>

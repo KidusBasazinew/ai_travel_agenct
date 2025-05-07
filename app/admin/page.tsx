@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getAllTrips } from "@/appwrite/trips";
 import { Models } from "appwrite";
 
-const page = () => {
+const Page = () => {
   const [trips, setTrips] = useState<Models.Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,4 +62,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -8,7 +8,7 @@ import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import "../../components/syncfusion-license";
 
 import MobileSidebar from "@/components/MobileSidebar";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { account } from "@/appwrite/client";
 import { getExistingUser, storeUserData } from "@/appwrite/auth";
 

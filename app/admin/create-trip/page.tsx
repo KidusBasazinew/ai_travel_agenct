@@ -14,6 +14,7 @@ import { cn, formatKey } from "@/lib/utils";
 import { world_map } from "@/constants/world_map";
 import { account } from "@/appwrite/client";
 import Header from "@/components/Header";
+import Image from "next/image";
 
 const CreateTripPage = () => {
   const router = useRouter();
@@ -225,7 +226,10 @@ const CreateTripPage = () => {
               className="button-class !h-12 !w-full"
               disabled={loading}
             >
-              <img
+              <Image
+                width={100}
+                height={100}
+                alt=""
                 src={`/assets/icons/${
                   loading ? "loader.svg" : "magic-star.svg"
                 }`}

@@ -5,6 +5,7 @@ import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface Props {
   title: string;
@@ -44,7 +45,13 @@ const Header = ({ title, description, ctaText, ctaUrl }: Props) => {
             type="button"
             className="button-class !h-11 !w-full md:w-[240px]"
           >
-            <img src="/assets/icons/plus.svg" alt="plus" className="size-5" />
+            <Image
+              src="/assets/icons/plus.svg"
+              alt="plus"
+              className="size-5"
+              width={100}
+              height={100}
+            />
             <span className="p-16-semibold text-white">{ctaText}</span>
           </ButtonComponent>
         </Link>

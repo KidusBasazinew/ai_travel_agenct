@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./app.css";
-import { registerLicense } from "@syncfusion/ej2-base";
 import Navbar from "@/components/Navbar";
-
-// Only call it once on client
-registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_LICENSE_KEY as string);
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

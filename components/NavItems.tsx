@@ -45,7 +45,13 @@ const NavItems = () => {
   return (
     <section className="nav-items">
       <Link href="/" className="link-logo">
-        <img src="/assets/icons/logo.svg" alt="logo" className="size-[30px]" />
+        <Image
+          src="/assets/icons/logo.svg"
+          alt="logo"
+          className="size-[30px]"
+          width={400}
+          height={400}
+        />
         <h1>Tourvisto</h1>
       </Link>
 
@@ -58,7 +64,9 @@ const NavItems = () => {
                   pathname === href ? "bg-primary-100 !text-white" : ""
                 }`}
               >
-                <img
+                <Image
+                  width={100}
+                  height={100}
                   src={icon}
                   alt={label}
                   className={`group-hover:brightness-0 size-0 group-hover:invert ${

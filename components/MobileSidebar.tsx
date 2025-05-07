@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import NavItems from "./NavItems";
+import Image from "next/image";
 
 const MobileSidebar = () => {
   let sidebar: SidebarComponent;
@@ -16,7 +17,9 @@ const MobileSidebar = () => {
     <div className="mobile-sidebar wrapper">
       <header>
         <Link href="/">
-          <img
+          <Image
+            width={600}
+            height={600}
             src="/assets/icons/logo.svg"
             alt="Logo"
             className="size-[30px]"

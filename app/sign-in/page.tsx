@@ -10,8 +10,6 @@ import "../../components/syncfusion-license";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export async function clientLoader() {}
-
 const SignIn = () => {
   const router = useRouter();
 
@@ -24,7 +22,7 @@ const SignIn = () => {
           router.push("/");
         }
       } catch (e) {
-        console.log("No user logged in");
+        console.log("No user logged in", e);
       }
     };
     checkAuth();

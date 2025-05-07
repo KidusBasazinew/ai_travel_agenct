@@ -1,5 +1,5 @@
 import { calculateTrendPercentage, cn } from "@/lib/utils";
-
+import Image from "next/image";
 const StatsCard = ({
   headerTitle,
   total,
@@ -23,12 +23,14 @@ const StatsCard = ({
 
           <div className="flex items-center gap-2">
             <figure className="flex items-center gap-1">
-              <img
+              <Image
                 src={`/assets/icons/${
                   isDecrement ? "arrow-down-red.svg" : "arrow-up-green.svg"
                 }`}
                 className="size-5"
                 alt="arrow"
+                width={100}
+                height={100}
               />
               <figcaption
                 className={cn(
@@ -45,7 +47,9 @@ const StatsCard = ({
           </div>
         </div>
 
-        <img
+        <Image
+          width={100}
+          height={100}
           src={`/assets/icons/${
             isDecrement ? "decrement.svg" : "increment.svg"
           } `}
