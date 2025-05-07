@@ -1,6 +1,6 @@
 "use client";
 import Header from "@/components/Header";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   GridComponent,
   ColumnsDirective,
@@ -10,9 +10,30 @@ import { cn, formatDate } from "@/lib/utils";
 import { getAllUsers } from "@/appwrite/auth";
 
 import "../../../components/syncfusion-license";
+import { Models } from "appwrite";
 
-const page = async () => {
-  const { users, total } = await getAllUsers(10, 0);
+const page = () => {
+  const [users, setUsers] = useState<{
+    total: number;
+    users: Models.Document[];
+  }>({
+    total: 0,
+    users: [],
+  });
+
+  const fetchUsers = async () => {
+    try {
+      const res = await getAllUsers(100, 0);
+      setUsers(res);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <main className="all-users wrapper">
@@ -21,7 +42,7 @@ const page = async () => {
         description="Filter, sort, and access detailed user profiles"
       />
 
-      <GridComponent dataSource={users} gridLines="None">
+      <GridComponent dataSource={users.users} gridLines="None">
         <ColumnsDirective>
           <ColumnDirective
             field="name"

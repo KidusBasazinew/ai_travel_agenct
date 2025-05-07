@@ -211,7 +211,7 @@
     @apply bg-hero bg-origin-content bg-cover;
 
     div {
-      @apply flex flex-col bg-linear100 bg-cover;
+      @apply flex flex-col bg-linear-100 bg-cover;
 
       section {
         @apply py-48 justify-center items-start flex flex-col gap-6;
@@ -380,7 +380,7 @@
   .root-nav {
     @apply flex justify-between gap-4  items-center;
     a {
-      @apply flex items-center gap-1.5 py-10;
+      @apply flex items-center gap-1.5 py-6;
       h1 {
         @apply text-base md:text-2xl font-bold text-dark-100;
       }

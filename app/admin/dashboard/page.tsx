@@ -109,7 +109,6 @@ const page = () => {
 
     fetchData();
   }, []);
-  console.log(dashboardStats.totalUsers);
   return (
     <main className="dashboard wrapper">
       <Header
