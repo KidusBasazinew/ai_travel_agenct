@@ -7,7 +7,10 @@ import Image from "next/image";
 import { logoutUser, getExistingUser } from "@/appwrite/auth";
 import { account } from "@/appwrite/client";
 
-const NavItems = () => {
+interface Props {
+  handleClick?: () => void;
+}
+const NavItems: React.FC<Props> = ({ handleClick }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<BaseUser | null>(null);
@@ -57,26 +60,30 @@ const NavItems = () => {
 
       <div className="container">
         <nav>
-          {sidebarItems.map(({ id, href, icon, label }) => (
-            <Link href={href} key={id}>
-              <div
-                className={`group nav-item ${
-                  pathname === href ? "bg-primary-100 !text-white" : ""
-                }`}
-              >
-                <Image
-                  width={100}
-                  height={100}
-                  src={icon}
-                  alt={label}
-                  className={`group-hover:brightness-0 size-0 group-hover:invert ${
-                    pathname === href ? "brightness-0 invert" : "text-dark-200"
+          <nav>
+            {sidebarItems.map(({ id, href, icon, label }) => (
+              <Link href={href} key={id} onClick={handleClick}>
+                <div
+                  className={`group nav-item ${
+                    pathname === href ? "bg-primary-100 !text-white" : ""
                   }`}
-                />
-                {label}
-              </div>
-            </Link>
-          ))}
+                >
+                  <Image
+                    width={100}
+                    height={100}
+                    src={icon}
+                    alt={label}
+                    className={`group-hover:brightness-0 size-0 group-hover:invert ${
+                      pathname === href
+                        ? "brightness-0 invert"
+                        : "text-dark-200"
+                    }`}
+                  />
+                  {label}
+                </div>
+              </Link>
+            ))}
+          </nav>
         </nav>
 
         <footer className="nav-footer">

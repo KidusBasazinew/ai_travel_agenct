@@ -94,7 +94,10 @@ const CheckoutForm = ({ tripId, price }: { tripId: string; price: number }) => {
       // Payment successful
       window.location.href = `/payment/${tripId}/success`;
     } catch (err) {
-      console.log(err, "Payment failed. Please try again.");
+      setError(
+        err instanceof Error ? err.message : "Payment failed. Please try again."
+      );
+      console.error("Payment error:", err);
     } finally {
       setLoading(false);
       setProcessing(false);

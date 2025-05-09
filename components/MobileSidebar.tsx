@@ -1,16 +1,14 @@
-// @ts-nocheck
-
 import Link from "next/link";
-
 import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import NavItems from "./NavItems";
 import Image from "next/image";
+import { useRef } from "react";
 
 const MobileSidebar = () => {
-  let sidebar: SidebarComponent;
+  const sidebarRef = useRef<SidebarComponent>(null);
 
   const toggleSidebar = () => {
-    sidebar.toggle();
+    sidebarRef.current?.toggle();
   };
 
   return (
@@ -29,19 +27,27 @@ const MobileSidebar = () => {
         </Link>
 
         <button onClick={toggleSidebar}>
-          <img src="/assets/icons/menu.svg" alt="menu" className="size-7" />
+          <Image
+            src="/assets/icons/menu.svg"
+            alt="menu"
+            className="size-7"
+            width={100}
+            height={100}
+          />
         </button>
       </header>
 
       <SidebarComponent
-        width={270}
-        ref={(Sidebar) => (sidebar = Sidebar)}
-        created={() => sidebar.hide()}
+        ref={sidebarRef}
+        created={() => sidebarRef.current?.hide()}
         closeOnDocumentClick={true}
         showBackdrop={true}
-        type="over"
+        type="Over"
+        width="270px"
       >
-        <NavItems handleClick={toggleSidebar} />
+        <div className="nav-items">
+          <NavItems handleClick={toggleSidebar} />
+        </div>
       </SidebarComponent>
     </div>
   );

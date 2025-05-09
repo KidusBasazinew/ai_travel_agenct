@@ -1,6 +1,8 @@
 import { ID, OAuthProvider, Query } from "appwrite";
 import { account, database, appwriteConfig } from "@/appwrite/client";
 import { redirect } from "next/navigation";
+import { useState, useEffect } from "react";
+import { Models } from "appwrite";
 
 // Function to check if a user already exists in the database
 export const getExistingUser = async (id: string) => {
@@ -161,3 +163,38 @@ export const getAllUsers = async (limit: number, offset: number) => {
     return { users: [], total: 0 };
   }
 };
+
+export function useAuth() {
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await account.get();
+        setUser(currentUser);
+      } catch (error) {
+        console.error("No user found", error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const logout = async () => {
+    try {
+      await account.deleteSession("current");
+      setUser(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      throw error;
+    }
+  };
+
+  return { user, loading, logout };
+}

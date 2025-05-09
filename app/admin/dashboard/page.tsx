@@ -8,17 +8,57 @@ import { getAllUsers, getExistingUser } from "@/appwrite/auth";
 import { account } from "@/appwrite/client";
 import { getAllTrips } from "@/appwrite/trips";
 import { parseTripData } from "@/lib/utils";
-import { Models } from "appwrite";
 import {
   getTripsByTravelStyle,
   getUserGrowthPerDay,
   getUsersAndTripsStats,
 } from "@/appwrite/dashboard";
+import { Models } from "appwrite";
+
+interface BaseUser {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  dateJoined: string;
+}
+
+interface DashboardStats {
+  totalUsers: number;
+  usersJoined: {
+    currentMonth: number;
+    lastMonth: number;
+  };
+  totalTrips: number;
+  tripsCreated: {
+    currentMonth: number;
+    lastMonth: number;
+  };
+  userRole: {
+    total: number;
+    currentMonth: number;
+    lastMonth: number;
+  };
+}
+
+interface TripData {
+  id: string;
+  name: string;
+  imageUrls: string[];
+  itinerary?: DayPlan[];
+  interests?: string;
+  travelStyle?: string;
+  estimatedPrice?: string;
+}
+
+interface TripDocument extends Models.Document {
+  tripDetails: string;
+  imageUrls?: string[];
+}
 
 const DashboardPage = () => {
   const [user, setUser] = useState<BaseUser | null>(null);
-  //@ts-ignore
-  const [allTrips, setAllTrips] = useState<any[]>([]);
+  const [allTrips, setAllTrips] = useState<TripData[]>([]);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats>({
     totalUsers: 0,
     usersJoined: { currentMonth: 0, lastMonth: 0 },
@@ -26,9 +66,6 @@ const DashboardPage = () => {
     tripsCreated: { currentMonth: 0, lastMonth: 0 },
     userRole: { total: 0, currentMonth: 0, lastMonth: 0 },
   });
-  const [userGrowth, setUserGrowth] = useState<any[]>([]);
-  const [tripsByTravelStyle, setTripsByTravelStyle] = useState<any[]>([]);
-  const [allUsers, setAllUsers] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,14 +84,13 @@ const DashboardPage = () => {
         }
 
         // Fetch all dashboard data in parallel
-        const [statsData, growthData, travelStyleData, usersData, tripsData] =
-          await Promise.all([
-            getUsersAndTripsStats(),
-            getUserGrowthPerDay(),
-            getTripsByTravelStyle(),
-            getAllUsers(4, 0),
-            getAllTrips(4, 0),
-          ]);
+        const [statsData, , , , tripsData] = await Promise.all([
+          getUsersAndTripsStats(),
+          getUserGrowthPerDay(),
+          getTripsByTravelStyle(),
+          getAllUsers(4, 0),
+          getAllTrips(4, 0),
+        ]);
 
         // Set dashboard stats
         setDashboardStats({
@@ -65,27 +101,27 @@ const DashboardPage = () => {
           userRole: statsData.userRole,
         });
 
-        // Set user growth data
-        setUserGrowth(growthData);
-
-        // Set trips by travel style
-        setTripsByTravelStyle(travelStyleData);
-
-        // Set mapped users
-        const mappedUsers = usersData.users.map((user: any) => ({
-          imageUrl: user.imageUrl,
-          name: user.name,
-          count: user.itineraryCount ?? Math.floor(Math.random() * 10),
-        }));
-        setAllUsers(mappedUsers);
-
         // Process and set trips
-        const parsedTrips = tripsData.allTrips.map((trip: any) => ({
-          id: trip.$id,
-          ...parseTripData(trip.tripDetails),
-          imageUrls: trip.imageUrls ?? [],
-        }));
-        setAllTrips(parsedTrips);
+        const parsedTrips = tripsData.allTrips
+          .filter((trip): trip is TripDocument => "tripDetails" in trip)
+          .map((trip) => {
+            const parsedData = parseTripData(trip.tripDetails);
+            if (!parsedData) {
+              return null;
+            }
+            return {
+              id: trip.$id,
+              name: parsedData.name || "",
+              imageUrls: trip.imageUrls || [],
+              itinerary: parsedData.itinerary,
+              interests: parsedData.interests,
+              travelStyle: parsedData.travelStyle,
+              estimatedPrice: parsedData.estimatedPrice,
+            };
+          })
+          .filter((trip): trip is NonNullable<typeof trip> => trip !== null);
+
+        setAllTrips(parsedTrips as Trip[]);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -93,12 +129,13 @@ const DashboardPage = () => {
 
     fetchData();
   }, []);
+
   return (
     <main className="dashboard wrapper">
       <Header
-        title={`Welcome ${user?.name ?? "Gust"} 👋`}
-        description="Track activitys,trends and popular destination in real time"
-      ></Header>
+        title={`Welcome ${user?.name ?? "Guest"} 👋`}
+        description="Track activities, trends and popular destinations in real time"
+      />
       <section className="flex flex-col gap-6">
         <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatsCard
@@ -128,7 +165,7 @@ const DashboardPage = () => {
             <TripCard
               key={trip.id}
               id={trip.id}
-              name={trip.name || ""} // Use already parsed data
+              name={trip.name}
               imageUrl={trip.imageUrls[0]}
               location={trip.itinerary?.[0]?.location ?? ""}
               tags={[trip.interests || "", trip.travelStyle || ""]}

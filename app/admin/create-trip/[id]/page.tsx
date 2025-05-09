@@ -11,6 +11,7 @@ import TripCard from "@/components/TripCard";
 import { useEffect, useState } from "react";
 import { getTripById, getAllTrips } from "@/appwrite/trips";
 import { Models } from "appwrite";
+import Image from "next/image";
 
 interface DayPlan {
   day: number;
@@ -143,7 +144,9 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
 
         <section className="gallery">
           {imageUrls.map((url: string, i: number) => (
-            <img
+            <Image
+              width={700}
+              height={700}
               src={url}
               key={i}
               alt={`Trip image ${i + 1}`}
@@ -175,10 +178,12 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
               .fill("null")
               .map((_, index) => (
                 <li key={index}>
-                  <img
+                  <Image
                     src="/assets/icons/star.svg"
                     alt="star"
                     className="size-[18px]"
+                    width={100}
+                    height={100}
                   />
                 </li>
               ))}

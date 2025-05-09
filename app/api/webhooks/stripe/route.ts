@@ -1,6 +1,14 @@
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe";
 import { getTripById } from "@/appwrite/trips";
+import { Stripe } from "stripe";
+
+type PaymentIntentWithMetadata = Stripe.PaymentIntent & {
+  metadata: {
+    tripId: string;
+    userId?: string;
+  };
+};
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -15,22 +23,31 @@ export async function POST(req: Request) {
 
     switch (event.type) {
       case "payment_intent.succeeded":
-        await handlePaymentSuccess(event.data.object);
+        await handlePaymentSuccess(
+          event.data.object as PaymentIntentWithMetadata
+        );
         break;
       case "payment_intent.payment_failed":
-        await handlePaymentFailure(event.data.object);
+        await handlePaymentFailure(
+          event.data.object as PaymentIntentWithMetadata
+        );
         break;
     }
 
     return new Response(null, { status: 200 });
-  } catch (err: any) {
-    //@ts-ignore
-    console.error("Webhook error:", err.message);
-    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+  } catch (err) {
+    console.error(
+      "Webhook error:",
+      err instanceof Error ? err.message : "Unknown error"
+    );
+    return new Response(
+      `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}`,
+      { status: 400 }
+    );
   }
 }
-//@ts-ignore
-async function handlePaymentSuccess(paymentIntent: any) {
+
+async function handlePaymentSuccess(paymentIntent: PaymentIntentWithMetadata) {
   try {
     const { tripId } = paymentIntent.metadata;
 
@@ -46,8 +63,8 @@ async function handlePaymentSuccess(paymentIntent: any) {
     console.error("Error handling successful payment:", error);
   }
 }
-//@ts-ignore
-async function handlePaymentFailure(paymentIntent: any) {
+
+async function handlePaymentFailure(paymentIntent: PaymentIntentWithMetadata) {
   try {
     const { tripId } = paymentIntent.metadata;
 

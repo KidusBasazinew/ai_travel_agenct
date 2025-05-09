@@ -26,7 +26,7 @@ const SignIn = () => {
       }
     };
     checkAuth();
-  }, []);
+  }, [router]);
 
   return (
     <main className="auth">

@@ -11,7 +11,6 @@ import { getAllUsers } from "@/appwrite/auth";
 
 import "../../../components/syncfusion-license";
 import { Models } from "appwrite";
-import page from "../page";
 import Image from "next/image";
 
 const Page = () => {
@@ -115,4 +114,4 @@ const Page = () => {
   );
 };
 
-export default page;
+export default Page;

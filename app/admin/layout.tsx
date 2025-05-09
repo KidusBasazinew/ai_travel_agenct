@@ -45,7 +45,7 @@ const AdminLayout = ({
       }
     };
     checkAuth();
-  }, []);
+  }, [router]);
 
   return (
     <div className="admin-layout flex">

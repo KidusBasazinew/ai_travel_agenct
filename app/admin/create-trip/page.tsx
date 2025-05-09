@@ -15,7 +15,16 @@ import { world_map } from "@/constants/world_map";
 import { account } from "@/appwrite/client";
 import Header from "@/components/Header";
 import Image from "next/image";
-
+interface RawCountry {
+  name: {
+    common: string;
+  };
+  flag: string;
+  latlng: [number, number];
+  maps?: {
+    openStreetMap?: string;
+  };
+}
 const CreateTripPage = () => {
   const router = useRouter();
 
@@ -35,7 +44,8 @@ const CreateTripPage = () => {
     const fetchCountries = async () => {
       const res = await fetch("https://restcountries.com/v3.1/all");
       const data = await res.json();
-      const parsed = data.map((country: any) => ({
+
+      const parsed: Country[] = data.map((country: RawCountry) => ({
         name: country.flag + country.name.common,
         coordinates: country.latlng,
         value: country.name.common,

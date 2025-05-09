@@ -1,6 +1,4 @@
 "use client";
-import { IntlBase } from "@syncfusion/ej2-base";
-import getActualDateTimeFormat = IntlBase.getActualDateTimeFormat;
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

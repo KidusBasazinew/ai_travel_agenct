@@ -29,8 +29,8 @@ const StatsCard = ({
                 }`}
                 className="size-5"
                 alt="arrow"
-                width={100}
-                height={100}
+                width={20}
+                height={20}
               />
               <figcaption
                 className={cn(
@@ -52,7 +52,7 @@ const StatsCard = ({
           height={100}
           src={`/assets/icons/${
             isDecrement ? "decrement.svg" : "increment.svg"
-          } `}
+          }`}
           className="xl:w-32 w-full h-full md:h-32 xl:h-full"
           alt="trend graph"
         />

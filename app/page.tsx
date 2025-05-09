@@ -7,14 +7,14 @@ import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { PagerComponent } from "@syncfusion/ej2-react-grids";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "../components/syncfusion-license";
 
 import FeaturedDestination from "@/components/FeaturedDestination";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-export default function Home() {
-  const [allTrips, setAllTrips] = useState<Trip[]>([]);
+
+function TripsSection() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
@@ -47,26 +47,39 @@ export default function Home() {
     fetchTrips(currentPage);
   }, [currentPage]);
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const tripsData = await getAllTrips(4, 0);
-        //@ts-ignore
-        const parsedTrips = tripsData.allTrips.map((trip: any) => ({
-          id: trip.$id,
-          ...parseTripData(trip.tripDetails),
-          imageUrls: trip.imageUrls ?? [],
-        }));
-        setAllTrips(parsedTrips as Trip[]);
-        return tripsData;
-      } catch (error) {
-        console.error("Error fetching trips:", error);
-        return [];
-      }
-    };
-    fetchTrips();
-  }, []);
+  return (
+    <section id="trips" className="py-20 wrapper flex flex-col gap-10">
+      <Header
+        title="Handpicked Trips"
+        description="Browse well-planned trips designes for your travel style"
+      />
 
+      <div className="trip-grid">
+        {trips.map((trip) => (
+          <TripCard
+            key={trip.id}
+            id={trip.id}
+            name={trip.name}
+            imageUrl={trip.imageUrls[0]}
+            location={trip.itinerary?.[0]?.location ?? ""}
+            tags={[trip.interests, trip.travelStyle]}
+            price={trip.estimatedPrice}
+          />
+        ))}
+      </div>
+
+      <PagerComponent
+        totalRecordsCount={total}
+        pageSize={8}
+        currentPage={currentPage}
+        click={(args) => handlePageChange(args.currentPage)}
+        cssClass="!mb-4"
+      />
+    </section>
+  );
+}
+
+export default function Home() {
   return (
     <div>
       <main className="flex flex-col">
@@ -157,34 +170,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="trips" className="py-20 wrapper flex flex-col gap-10">
-          <Header
-            title="Handpicked Trips"
-            description="Browse well-planned trips designes for your travel style"
-          />
-
-          <div className="trip-grid">
-            {trips.map((trip) => (
-              <TripCard
-                key={trip.id}
-                id={trip.id}
-                name={trip.name}
-                imageUrl={trip.imageUrls[0]}
-                location={trip.itinerary?.[0]?.location ?? ""}
-                tags={[trip.interests, trip.travelStyle]}
-                price={trip.estimatedPrice}
-              />
-            ))}
-          </div>
-
-          <PagerComponent
-            totalRecordsCount={total}
-            pageSize={8}
-            currentPage={currentPage}
-            click={(args) => handlePageChange(args.currentPage)}
-            cssClass="!mb-4"
-          />
-        </section>
+        <Suspense fallback={<div>Loading trips...</div>}>
+          <TripsSection />
+        </Suspense>
 
         <footer className="h-28 bg-white">
           <div className="wrapper footer-container">
