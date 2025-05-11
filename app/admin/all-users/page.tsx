@@ -12,6 +12,7 @@ import { getAllUsers } from "@/appwrite/auth";
 import "../../../components/syncfusion-license";
 import { Models } from "appwrite";
 import Image from "next/image";
+import UsersLoadingSkeleton from "@/components/UsersLoadingSkeleton";
 
 const Page = () => {
   const [users, setUsers] = useState<{
@@ -22,10 +23,14 @@ const Page = () => {
     users: [],
   });
 
+  const [loading, setLoading] = useState(true);
+
   const fetchUsers = async () => {
     try {
+      setLoading(true);
       const res = await getAllUsers(100, 0);
       setUsers(res);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
       return [];
@@ -42,74 +47,77 @@ const Page = () => {
         title="Manage Users"
         description="Filter, sort, and access detailed user profiles"
       />
-
-      <GridComponent dataSource={users.users} gridLines="None">
-        <ColumnsDirective>
-          <ColumnDirective
-            field="name"
-            headerText="Name"
-            width="200"
-            textAlign="Left"
-            template={(props: UserData) => (
-              <div className="flex items-center gap-1.5 px-4">
-                <Image
-                  src={props.imageUrl}
-                  alt="user"
-                  className="rounded-full size-8 aspect-square"
-                  referrerPolicy="no-referrer"
-                  width={32}
-                  height={32}
-                />
-                <span>{props.name}</span>
-              </div>
-            )}
-          />
-          <ColumnDirective
-            field="email"
-            headerText="Email Address"
-            width="200"
-            textAlign="Left"
-          />
-          <ColumnDirective
-            field="joinedAt"
-            headerText="Date Joined"
-            width="140"
-            textAlign="Left"
-            template={({ joinedAt }: { joinedAt: string }) =>
-              formatDate(joinedAt)
-            }
-          />
-          <ColumnDirective
-            field="status"
-            headerText="Type"
-            width="100"
-            textAlign="Left"
-            template={({ status }: UserData) => (
-              <article
-                className={cn(
-                  "status-column",
-                  status === "user" ? "bg-success-50" : "bg-light-300"
-                )}
-              >
-                <div
+      {loading ? (
+        <UsersLoadingSkeleton />
+      ) : (
+        <GridComponent dataSource={users.users} gridLines="None">
+          <ColumnsDirective>
+            <ColumnDirective
+              field="name"
+              headerText="Name"
+              width="200"
+              textAlign="Left"
+              template={(props: UserData) => (
+                <div className="flex items-center gap-1.5 px-4">
+                  <Image
+                    src={props.imageUrl}
+                    alt="user"
+                    className="rounded-full size-8 aspect-square"
+                    referrerPolicy="no-referrer"
+                    width={32}
+                    height={32}
+                  />
+                  <span>{props.name}</span>
+                </div>
+              )}
+            />
+            <ColumnDirective
+              field="email"
+              headerText="Email Address"
+              width="200"
+              textAlign="Left"
+            />
+            <ColumnDirective
+              field="joinedAt"
+              headerText="Date Joined"
+              width="140"
+              textAlign="Left"
+              template={({ joinedAt }: { joinedAt: string }) =>
+                formatDate(joinedAt)
+              }
+            />
+            <ColumnDirective
+              field="status"
+              headerText="Type"
+              width="100"
+              textAlign="Left"
+              template={({ status }: UserData) => (
+                <article
                   className={cn(
-                    "size-1.5 rounded-full",
-                    status === "user" ? "bg-success-500" : "bg-gray-500"
-                  )}
-                />
-                <h3
-                  className={cn(
-                    "font-inter text-xs font-medium",
-                    status === "user" ? "text-success-700" : "text-gray-500"
+                    "status-column",
+                    status === "user" ? "bg-success-50" : "bg-light-300"
                   )}
                 >
-                  {status}
-                </h3>
-              </article>
-            )}
-          />
-        </ColumnsDirective>
-      </GridComponent>
+                  <div
+                    className={cn(
+                      "size-1.5 rounded-full",
+                      status === "user" ? "bg-success-500" : "bg-gray-500"
+                    )}
+                  />
+                  <h3
+                    className={cn(
+                      "font-inter text-xs font-medium",
+                      status === "user" ? "text-success-700" : "text-gray-500"
+                    )}
+                  >
+                    {status}
+                  </h3>
+                </article>
+              )}
+            />
+          </ColumnsDirective>
+        </GridComponent>
+      )}
     </main>
   );
 };

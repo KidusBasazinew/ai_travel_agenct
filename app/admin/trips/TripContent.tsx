@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import TripCard from "@/components/TripCard";
 import { getAllTrips } from "@/appwrite/trips";
 import { parseTripData } from "@/lib/utils";
+import TripsLoadingPage from "../../../components/TripCardLoadingSkeleton";
 
 export default function TripsContent() {
   const router = useRouter();
@@ -18,7 +19,10 @@ export default function TripsContent() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [total, setTotal] = useState(0);
 
+  const [loading, setLoading] = useState(true);
+
   const fetchTrips = async (page: number) => {
+    setLoading(true);
     const limit = 8;
     const offset = (page - 1) * limit;
     const { allTrips, total } = await getAllTrips(limit, offset);
@@ -31,6 +35,7 @@ export default function TripsContent() {
 
     setTrips(parsedTrips as Trip[]);
     setTotal(total);
+    setLoading(false);
   };
 
   const handlePageChange = (page: number) => {
@@ -57,17 +62,21 @@ export default function TripsContent() {
         </h1>
 
         <div className="trip-grid mb-4">
-          {trips.map((trip) => (
-            <TripCard
-              key={trip.id}
-              id={trip.id}
-              name={trip.name}
-              imageUrl={trip.imageUrls[0]}
-              location={trip.itinerary?.[0]?.location ?? ""}
-              tags={[trip.interests, trip.travelStyle]}
-              price={trip.estimatedPrice}
-            />
-          ))}
+          {loading ? (
+            <TripsLoadingPage length={8} />
+          ) : (
+            trips.map((trip) => (
+              <TripCard
+                key={trip.id}
+                id={trip.id}
+                name={trip.name}
+                imageUrl={trip.imageUrls[0]}
+                location={trip.itinerary?.[0]?.location ?? ""}
+                tags={[trip.interests, trip.travelStyle]}
+                price={trip.estimatedPrice}
+              />
+            ))
+          )}
         </div>
 
         <PagerComponent

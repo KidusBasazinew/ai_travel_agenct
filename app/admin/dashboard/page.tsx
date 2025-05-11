@@ -14,6 +14,7 @@ import {
   getUsersAndTripsStats,
 } from "@/appwrite/dashboard";
 import { Models } from "appwrite";
+import TripsLoadingPage from "@/components/TripCardLoadingSkeleton";
 
 interface BaseUser {
   id: string;
@@ -67,66 +68,69 @@ const DashboardPage = () => {
     userRole: { total: 0, currentMonth: 0, lastMonth: 0 },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch current user
-        const currentUser = await account.get();
-        const userData = await getExistingUser(currentUser.$id);
-        if (userData) {
-          setUser({
-            id: userData.$id,
-            name: userData.name,
-            email: userData.email,
-            imageUrl: userData.imageUrl || "",
-            dateJoined: userData.joinedAt,
-          });
-        }
+  const [loading, setLoading] = useState(true);
 
-        // Fetch all dashboard data in parallel
-        const [statsData, , , , tripsData] = await Promise.all([
-          getUsersAndTripsStats(),
-          getUserGrowthPerDay(),
-          getTripsByTravelStyle(),
-          getAllUsers(4, 0),
-          getAllTrips(4, 0),
-        ]);
-
-        // Set dashboard stats
-        setDashboardStats({
-          totalUsers: statsData.totalUsers,
-          usersJoined: statsData.usersJoined,
-          totalTrips: statsData.totalTrips,
-          tripsCreated: statsData.tripsCreated,
-          userRole: statsData.userRole,
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      // Fetch current user
+      const currentUser = await account.get();
+      const userData = await getExistingUser(currentUser.$id);
+      if (userData) {
+        setUser({
+          id: userData.$id,
+          name: userData.name,
+          email: userData.email,
+          imageUrl: userData.imageUrl || "",
+          dateJoined: userData.joinedAt,
         });
-
-        // Process and set trips
-        const parsedTrips = tripsData.allTrips
-          .filter((trip): trip is TripDocument => "tripDetails" in trip)
-          .map((trip) => {
-            const parsedData = parseTripData(trip.tripDetails);
-            if (!parsedData) {
-              return null;
-            }
-            return {
-              id: trip.$id,
-              name: parsedData.name || "",
-              imageUrls: trip.imageUrls || [],
-              itinerary: parsedData.itinerary,
-              interests: parsedData.interests,
-              travelStyle: parsedData.travelStyle,
-              estimatedPrice: parsedData.estimatedPrice,
-            };
-          })
-          .filter((trip): trip is NonNullable<typeof trip> => trip !== null);
-
-        setAllTrips(parsedTrips as Trip[]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
-    };
 
+      // Fetch all dashboard data in parallel
+      const [statsData, , , , tripsData] = await Promise.all([
+        getUsersAndTripsStats(),
+        getUserGrowthPerDay(),
+        getTripsByTravelStyle(),
+        getAllUsers(4, 0),
+        getAllTrips(4, 0),
+      ]);
+
+      // Set dashboard stats
+      setDashboardStats({
+        totalUsers: statsData.totalUsers,
+        usersJoined: statsData.usersJoined,
+        totalTrips: statsData.totalTrips,
+        tripsCreated: statsData.tripsCreated,
+        userRole: statsData.userRole,
+      });
+
+      // Process and set trips
+      const parsedTrips = tripsData.allTrips
+        .filter((trip): trip is TripDocument => "tripDetails" in trip)
+        .map((trip) => {
+          const parsedData = parseTripData(trip.tripDetails);
+          if (!parsedData) {
+            return null;
+          }
+          return {
+            id: trip.$id,
+            name: parsedData.name || "",
+            imageUrls: trip.imageUrls || [],
+            itinerary: parsedData.itinerary,
+            interests: parsedData.interests,
+            travelStyle: parsedData.travelStyle,
+            estimatedPrice: parsedData.estimatedPrice,
+          };
+        })
+        .filter((trip): trip is NonNullable<typeof trip> => trip !== null);
+
+      setAllTrips(parsedTrips as Trip[]);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -161,17 +165,21 @@ const DashboardPage = () => {
       <section className="container">
         <h1 className="text-xl font-semibold text-dark-100">Created Trips</h1>
         <div className="trip-grid">
-          {allTrips.map((trip) => (
-            <TripCard
-              key={trip.id}
-              id={trip.id}
-              name={trip.name}
-              imageUrl={trip.imageUrls[0]}
-              location={trip.itinerary?.[0]?.location ?? ""}
-              tags={[trip.interests || "", trip.travelStyle || ""]}
-              price={trip.estimatedPrice || ""}
-            />
-          ))}
+          {loading ? (
+            <TripsLoadingPage length={4} />
+          ) : (
+            allTrips.map((trip) => (
+              <TripCard
+                key={trip.id}
+                id={trip.id}
+                name={trip.name}
+                imageUrl={trip.imageUrls[0]}
+                location={trip.itinerary?.[0]?.location ?? ""}
+                tags={[trip.interests || "", trip.travelStyle || ""]}
+                price={trip.estimatedPrice || ""}
+              />
+            ))
+          )}
         </div>
       </section>
     </main>

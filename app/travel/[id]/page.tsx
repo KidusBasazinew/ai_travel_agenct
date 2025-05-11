@@ -120,13 +120,9 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
 
   return (
     <main className="travel-detail wrapper">
-      <Header
-        title="Trip Details"
-        description="View and edit AI-generated travel plans"
-      />
       <section className="container wrapper-md">
         <header>
-          <h1 className="p-40-semibold text-dark-100">{name}</h1>
+          <h1 className="p-40-semibold text-dark-100 mt-20">{name}</h1>
           <div className="flex items-center gap-5">
             <InfoPill
               text={`${duration} day plan`}

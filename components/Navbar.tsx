@@ -64,7 +64,7 @@ export default function Navbar() {
   if (
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/admin") ||
-    pathname.startsWith("/payment/%5Bid%5D")
+    pathname.startsWith("/payment")
   ) {
     return null;
   }

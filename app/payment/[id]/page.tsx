@@ -60,42 +60,62 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen px-4 md:px-16 py-8 gap-10">
+    <div className="flex flex-col md:flex-row min-h-screen px-4 md:px-16 py-8 gap-10 bg-white">
       {/* Trip Info Section */}
-      <section className="w-full md:w-1/2 flex flex-col justify-center items-start gap-6">
-        <div className="flex items-center gap-x-3">
+      <section className="w-full md:w-1/2 flex flex-col justify-center items-start px-6 md:px-12 lg:px-20 py-8 bg-white gap-6">
+        {/* Back Link + Logo */}
+        <div className="flex items-center gap-3">
           <Image
             src="/assets/icons/logo.svg"
-            width={40}
-            height={40}
+            width={32}
+            height={32}
             alt="logo"
-            className="size-10"
+            className="size-8"
           />
-          <h1 className="text-2xl font-semibold text-gray-800">Tourvisto</h1>
+          <h1 className="text-xl font-semibold text-gray-800">Tourvisto</h1>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-2xl md:text-3xl text-gray-600">
-            Enjoy Your Trip at {tripData.name}
+        {/* Trip Title & Price */}
+        <div className="space-y-2">
+          <p className="text-sm text-gray-500">
+            Pay {tripData.name}: {tripData.interests}, {tripData.travelStyle}
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900">
+            {tripData.estimatedPrice}
           </h2>
-          <h3 className="text-3xl md:text-4xl font-bold text-gray-800">
-            ${tripData.estimatedPrice}
+        </div>
+
+        {/* Trip Image */}
+        <Image
+          src={trip.imageUrls[0]}
+          width={500}
+          height={300}
+          alt={tripData.name}
+          className="rounded-lg object-cover w-full max-w-sm h-48"
+        />
+
+        {/* Trip Description */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {tripData.name}
           </h3>
+          <p className="text-sm text-gray-500">
+            {tripData.interests}, {tripData.travelStyle}
+          </p>
+        </div>
 
-          <Image
-            src={trip.imageUrls[0]}
-            width={700}
-            height={700}
-            alt={tripData.name}
-            className="w-full max-w-md h-64 md:h-72 rounded-lg object-cover"
-          />
-
-          <div>
-            <h4 className="text-lg font-semibold">{tripData.name}</h4>
-            <p className="text-gray-600 text-sm md:text-base">
-              {tripData.interests}, {tripData.travelStyle}
-            </p>
-          </div>
+        {/* Footer */}
+        <div className="mt-10 flex gap-4 items-center text-xs text-gray-400">
+          <span>
+            Powered by <strong className="text-gray-600">Stripe</strong>
+          </span>
+          <span className="h-4 border-l border-gray-300" />
+          <a href="#" className="hover:underline">
+            Terms
+          </a>
+          <a href="#" className="hover:underline">
+            Privacy
+          </a>
         </div>
       </section>
 

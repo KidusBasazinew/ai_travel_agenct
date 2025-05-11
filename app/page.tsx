@@ -13,6 +13,7 @@ import "../components/syncfusion-license";
 import FeaturedDestination from "@/components/FeaturedDestination";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import TripsLoadingPage from "@/components/TripCardLoadingSkeleton";
 
 function TripsSection() {
   const router = useRouter();
@@ -23,7 +24,10 @@ function TripsSection() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [total, setTotal] = useState(0);
 
+  const [loading, setLoading] = useState(true);
+
   const fetchTrips = async (page: number) => {
+    setLoading(true);
     const limit = 8;
     const offset = (page - 1) * limit;
     const { allTrips, total } = await getAllTrips(limit, offset);
@@ -36,6 +40,8 @@ function TripsSection() {
 
     setTrips(parsedTrips as Trip[]);
     setTotal(total);
+
+    setLoading(false);
   };
 
   const handlePageChange = (page: number) => {
@@ -55,17 +61,21 @@ function TripsSection() {
       />
 
       <div className="trip-grid">
-        {trips.map((trip) => (
-          <TripCard
-            key={trip.id}
-            id={trip.id}
-            name={trip.name}
-            imageUrl={trip.imageUrls[0]}
-            location={trip.itinerary?.[0]?.location ?? ""}
-            tags={[trip.interests, trip.travelStyle]}
-            price={trip.estimatedPrice}
-          />
-        ))}
+        {loading ? (
+          <TripsLoadingPage length={8} />
+        ) : (
+          trips.map((trip) => (
+            <TripCard
+              key={trip.id}
+              id={trip.id}
+              name={trip.name}
+              imageUrl={trip.imageUrls[0]}
+              location={trip.itinerary?.[0]?.location ?? ""}
+              tags={[trip.interests, trip.travelStyle]}
+              price={trip.estimatedPrice}
+            />
+          ))
+        )}
       </div>
 
       <PagerComponent
