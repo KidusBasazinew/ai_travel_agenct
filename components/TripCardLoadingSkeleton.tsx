@@ -5,8 +5,8 @@ import React from "react";
 const TripsLoadingPage = ({ length }: { length: number }) => {
   return (
     <>
-      {Array.from({ length: length }).map((_, idx) => (
-        <div className="trip-card">
+      {Array.from({ length }).map((_, idx) => (
+        <div key={idx} className="trip-card">
           {/* Image placeholder */}
           <SkeletonComponent
             width="100%"

@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
 import { getExistingUser, useAuth } from "@/appwrite/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
