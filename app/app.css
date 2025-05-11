@@ -26,6 +26,8 @@
 }
 
 :root {
+  --color-dark-100: #1f1f36;
+
   --color-primary-100: #256ff1;
   --color-primary-500: #175cd3;
   --color-primary-900: #0b4bb2;
@@ -38,7 +40,7 @@
   --color-tertiary-500: #06aed4;
   --color-tertiary-900: #0e8abf;
 
-  --color-gray-100: #f3f3f3;
+  --color-gray-100: #3b3b3b;
   --color-gray-500: #b3b3b3;
   --color-gray-900: #292929;
 
@@ -146,10 +148,9 @@
 
   .stats-card {
     @apply p-6 flex flex-col gap-6 bg-white shadow-400 rounded-20 text-dark-100;
-
-    .content {
-      @apply flex flex-row md:flex-col-reverse xl:flex-row xl:items-center gap-3 justify-between;
-    }
+  }
+  .content {
+    @apply flex flex-row md:flex-col-reverse xl:flex-row xl:items-center gap-3 justify-between;
   }
 
   .sign-in-card {
