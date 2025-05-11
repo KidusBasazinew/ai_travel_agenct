@@ -1,0 +1,1 @@
+"use strict";exports.id=935,exports.ids=[935],exports.modules={8935:(t,e,s)=>{s.r(e),s.d(e,{default:()=>r});let r=(0,s(3233).createProxy)(String.raw`C:\Users\Kidus\Desktop\web\nextjs\ai_travel\app\admin\trips\TripContent.tsx#default`)}};

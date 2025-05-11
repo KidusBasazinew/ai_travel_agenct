@@ -1,7 +1,20 @@
 {
-  "/sign-in/page": "app/sign-in/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/create-payment-link/route": "app/api/create-payment-link/route.js",
+  "/api/webhooks/stripe/route": "app/api/webhooks/stripe/route.js",
+  "/api/create-trip/route": "app/api/create-trip/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
   "/page": "app/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/payment/[id]/page": "app/payment/[id]/page.js",
+  "/payment/[id]/success/page": "app/payment/[id]/success/page.js",
+  "/payment/page": "app/payment/page.js",
+  "/sign-in/page": "app/sign-in/page.js",
+  "/travel/[id]/page": "app/travel/[id]/page.js",
   "/admin/all-users/page": "app/admin/all-users/page.js",
+  "/admin/create-trip/[id]/page": "app/admin/create-trip/[id]/page.js",
+  "/admin/create-trip/page": "app/admin/create-trip/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/trips/[id]/page": "app/admin/trips/[id]/page.js",
   "/admin/trips/page": "app/admin/trips/page.js"
 }

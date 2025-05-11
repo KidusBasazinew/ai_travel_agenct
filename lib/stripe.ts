@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.PUBLIC_NEXT_STRIPE_SECRET_KEY!, {
-  // apiVersion: '2025-03-31.basil'
+  apiVersion: "2025-04-30.basil", // 👈 required by Stripe v12
 });
 
 export const createProduct = async (
