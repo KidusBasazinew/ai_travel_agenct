@@ -12,7 +12,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { logout } = useAuth();
   const router = useRouter();
-  const [user, setUser] = useState<BaseUser | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -30,8 +30,9 @@ export default function Navbar() {
             name: userData.name,
             email: userData.email,
             imageUrl: userData.imageUrl || "",
+            status: userData.status,
           };
-          setUser(user as BaseUser);
+          setUser(user as UserData);
         }
       } catch (error) {
         console.error("No user found", error);
@@ -76,7 +77,7 @@ export default function Navbar() {
         "flex py-2 justify-between w-full items-center fixed z-50"
       )}
     >
-      <div className="flex items-center space-x-4 ml-2 lg:ml-10">
+      <div className="flex items-center space-x-4 ml-10">
         <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/assets/icons/logo.svg"
@@ -89,8 +90,8 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="flex items-center space-x-4 mr-2 lg:mr-10">
-        {true ? (
+      <div className="flex items-center space-x-4 mr-10">
+        {user?.status === "admin" ? (
           <Link
             href="/admin"
             className={cn(
@@ -100,7 +101,7 @@ export default function Navbar() {
               "font-base font-normal"
             )}
           >
-            Admin Panel
+            Admin
           </Link>
         ) : (
           <Link
