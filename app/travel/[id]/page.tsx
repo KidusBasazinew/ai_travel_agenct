@@ -5,7 +5,6 @@ import {
   ChipListComponent,
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons";
-import Header from "@/components/Header";
 import InfoPill from "@/components/InfoPill";
 import TripCard from "@/components/TripCard";
 import { useEffect, useState } from "react";
