@@ -252,6 +252,14 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
           </section>
         ))}
       </section>
+      <Link href={`/payment/${trip.$id}`} className="w-full">
+          <ButtonComponent
+            type="button"
+            className="button-class !h-11 !w-full "
+          >
+            <span className="p-16-semibold text-white">Book Now</span>
+          </ButtonComponent>
+        </Link>
       <section className="flex flex-col gap-6">
         <h2 className="p-24-semibold text-dark-100">Popular Trips</h2>
         <div className="trip-grid">
