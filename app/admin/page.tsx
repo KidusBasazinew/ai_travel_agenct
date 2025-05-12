@@ -98,7 +98,7 @@ const AdminDashboardPage = () => {
 
       {loading ? (
         <p>loading...</p>
-      ):(<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      ):(<><div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <StatsCard
           headerTitle="Total Users"
           total={stats.totalUsers}
@@ -149,7 +149,8 @@ const AdminDashboardPage = () => {
             </div>
           </div>
         </div>
-      </div>)}
+      </div>
+      </>)}
     </main>
   );
 };
