@@ -13,6 +13,7 @@ import { getTripById, getAllTrips } from "@/appwrite/trips";
 import { Models } from "appwrite";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "@/components/Header";
 
 interface DayPlan {
   day: number;
@@ -119,6 +120,10 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
 
   return (
     <main className="travel-detail wrapper">
+      <Header
+        title="Trip Details"
+        description="View and edit AI-generated travel plans"
+      />
       <section className="flex flex-col gap-9 mt-2.5 w-full max-w-3xl px-4 lg:px-8 mx-auto">
         <header className="flex flex-col gap-6 overflow-hidden">
           <h1 className="p-40-semibold text-dark-100 mt-20">{name}</h1>
@@ -198,36 +203,41 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
           </ul>
         </section>
 
-        <section className="title">
-          <article>
-            <h3>
+        <section className="flex justify-between gap-5">
+          <article className="flex flex-col gap-4">
+            <h3 className="text-xl md:text-3xl text-dark-100 font-semibold">
               {duration}-Day {country} {travelStyle} Trip
             </h3>
-            <p>
+            <p className="text-base md:text-2xl text-gray-100 font-normal">
               {budget}, {groupType} and {interests}
             </p>
           </article>
 
-          <h2>{estimatedPrice}</h2>
+          <h2 className="text-sm md:text-xl font-normal text-dark-100">
+            {estimatedPrice}
+          </h2>
         </section>
 
         <p className="text-sm md:text-lg font-normal text-dark-400">
           {description}
         </p>
 
-        <ul className="itinerary">
+        <ul className="flex flex-col gap-9">
           {itinerary?.map((dayPlan: DayPlan, index: number) => (
-            <li key={index}>
-              <h3>
+            <li key={index} className="flex flex-col gap-4">
+              <h3 className="text-base md:text-xl font-semibold text-dark-400">
                 Day {dayPlan.day}: {dayPlan.location}
               </h3>
-              <ul>
+              <ul className="flex flex-col gap-5">
                 {dayPlan.activities.map((activity, index: number) => (
-                  <li key={index}>
-                    <span className="flex-shring-0 p-18-semibold">
+                  <li
+                    key={index}
+                    className="flex flex-col sm:flex-row sm:items-start sm:gap-5 text-sm md:text-lg text-dark-400"
+                  >
+                    <span className="w-28 shrink-0 font-semibold">
                       {activity.time}
                     </span>
-                    <p className="flex-grow">{activity.description}</p>
+                    <p className="flex-1">{activity.description}</p>
                   </li>
                 ))}
               </ul>
