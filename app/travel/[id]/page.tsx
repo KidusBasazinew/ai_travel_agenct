@@ -1,19 +1,17 @@
 "use client";
 import { parseTripData, getFirstWord, cn } from "@/lib/utils";
 import {
-  ButtonComponent,
   ChipDirective,
   ChipListComponent,
   ChipsDirective,
 } from "@syncfusion/ej2-react-buttons";
+import Header from "@/components/Header";
 import InfoPill from "@/components/InfoPill";
 import TripCard from "@/components/TripCard";
 import { useEffect, useState } from "react";
 import { getTripById, getAllTrips } from "@/appwrite/trips";
 import { Models } from "appwrite";
-import Link from "next/link";
 import Image from "next/image";
-import Header from "@/components/Header";
 
 interface DayPlan {
   day: number;
@@ -181,11 +179,11 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
               .map((_, index) => (
                 <li key={index}>
                   <Image
+                    width={100}
+                    height={100}
                     src="/assets/icons/star.svg"
                     alt="star"
                     className="size-[18px]"
-                    width={100}
-                    height={100}
                   />
                 </li>
               ))}
@@ -203,19 +201,17 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
           </ul>
         </section>
 
-        <section className="flex justify-between gap-5">
-          <article className="flex flex-col gap-4">
-            <h3 className="text-xl md:text-3xl text-dark-100 font-semibold">
+        <section className="title">
+          <article>
+            <h3>
               {duration}-Day {country} {travelStyle} Trip
             </h3>
-            <p className="text-base md:text-2xl text-gray-100 font-normal">
+            <p>
               {budget}, {groupType} and {interests}
             </p>
           </article>
 
-          <h2 className="text-sm md:text-xl font-normal text-dark-100">
-            {estimatedPrice}
-          </h2>
+          <h2>{estimatedPrice}</h2>
         </section>
 
         <p className="text-sm md:text-lg font-normal text-dark-400">
@@ -259,14 +255,6 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
             </div>
           </section>
         ))}
-        <Link href={`/payment/${trip.$id}`} className="w-full">
-          <ButtonComponent
-            type="button"
-            className="button-class !h-11 !w-full "
-          >
-            <span className="p-16-semibold text-white">Book Now</span>
-          </ButtonComponent>
-        </Link>
       </section>
       <section className="flex flex-col gap-6">
         <h2 className="p-24-semibold text-dark-100">Popular Trips</h2>
