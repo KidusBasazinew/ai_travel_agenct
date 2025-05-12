@@ -118,10 +118,7 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
 
   return (
     <main className="travel-detail wrapper">
-      <Header
-        title="Trip Details"
-        description="View and edit AI-generated travel plans"
-      />
+     
       <section className="flex flex-col gap-9 mt-2.5 w-full max-w-3xl px-4 lg:px-8 mx-auto">
         <header className="flex flex-col gap-6 overflow-hidden">
           <h1 className="p-40-semibold text-dark-100 mt-20">{name}</h1>
