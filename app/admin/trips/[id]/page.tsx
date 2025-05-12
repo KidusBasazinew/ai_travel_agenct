@@ -122,9 +122,9 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
         title="Trip Details"
         description="View and edit AI-generated travel plans"
       />
-      <section className="container wrapper-md">
-        <header>
-          <h1 className="p-40-semibold text-dark-100">{name}</h1>
+      <section className="flex flex-col gap-9 mt-2.5 w-full max-w-3xl px-4 lg:px-8 mx-auto">
+        <header className="flex flex-col gap-6 overflow-hidden">
+          <h1 className="p-40-semibold text-dark-100 mt-20">{name}</h1>
           <div className="flex items-center gap-5">
             <InfoPill
               text={`${duration} day plan`}
@@ -142,11 +142,11 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
           </div>
         </header>
 
-        <section className="gallery">
+        <section className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-7 mt-1">
           {imageUrls.map((url: string, i: number) => (
             <Image
-              width={700}
-              height={700}
+              width={600}
+              height={600}
               src={url}
               key={i}
               alt={`Trip image ${i + 1}`}
@@ -218,19 +218,22 @@ export default function TripDetailPage({ params }: { params: { id: string } }) {
           {description}
         </p>
 
-        <ul className="itinerary">
+        <ul className="flex flex-col gap-9">
           {itinerary?.map((dayPlan: DayPlan, index: number) => (
-            <li key={index}>
-              <h3>
+            <li key={index} className="flex flex-col gap-4">
+              <h3 className="text-base md:text-xl font-semibold text-dark-400">
                 Day {dayPlan.day}: {dayPlan.location}
               </h3>
-              <ul>
+              <ul className="flex flex-col gap-5">
                 {dayPlan.activities.map((activity, index: number) => (
-                  <li key={index}>
-                    <span className="flex-shring-0 p-18-semibold">
+                  <li
+                    key={index}
+                    className="flex flex-col sm:flex-row sm:items-start sm:gap-5 text-sm md:text-lg text-dark-400"
+                  >
+                    <span className="w-28 shrink-0 font-semibold">
                       {activity.time}
                     </span>
-                    <p className="flex-grow">{activity.description}</p>
+                    <p className="flex-1">{activity.description}</p>
                   </li>
                 ))}
               </ul>
