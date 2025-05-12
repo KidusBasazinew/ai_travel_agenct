@@ -76,7 +76,7 @@ export default function Navbar() {
         "flex py-2 justify-between w-full items-center fixed z-50"
       )}
     >
-      <div className="flex items-center space-x-4 mr-2 lg:ml-10">
+      <div className="flex items-center space-x-4 ml-2 lg:ml-10">
         <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/assets/icons/logo.svg"
