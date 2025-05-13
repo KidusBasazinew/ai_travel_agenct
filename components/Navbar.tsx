@@ -91,7 +91,8 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center space-x-4 mr-10">
-        {user?.status === "admin" ? (
+        // user?.status === "admin" 
+        {true ? (
           <Link
             href="/admin"
             className={cn(
